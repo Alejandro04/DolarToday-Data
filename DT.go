@@ -112,12 +112,12 @@ func main() {
 			fmt.Println("error")
 		}
 		//Prepara una query para consultar
-		q := ` select today, cucuta 
+		q := ` select today, cucuta
 						from
 						data;
 					`
 		//Prepara una query para insertar
-		data, err := db.Prepare("INSERT INTO data VALUES( ?, ?)")
+		data, err := db.Prepare("INSERT INTO data VALUES( ?, ?, ?)")
 			if err != nil {
 					panic(err.Error())
 			}
@@ -146,6 +146,7 @@ func main() {
 
 		for rows.Next() {
 						var (
+										id int
 										today float64
 										cucuta float64
 						)
@@ -155,7 +156,7 @@ func main() {
 						fmt.Printf("the data is \n", today, cucuta)
 						if today != responseObject.USD.Transferencia || cucuta != responseObject.USD.EfectivoCucuta {
 							//guarda en db
-							_, err = data.Exec(responseObject.USD.Transferencia, responseObject.USD.EfectivoCucuta)
+							_, err = data.Exec(id, responseObject.USD.Transferencia, responseObject.USD.EfectivoCucuta)
 							if err != nil {
 								panic(err.Error())
 							}
